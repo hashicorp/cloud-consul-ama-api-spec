@@ -14,7 +14,40 @@
   "produces": [
     "application/json"
   ],
+  "basePath": "/consulama/2019-09-10/",
   "paths": {
+    "/clientconfig": {
+      "post": {
+        "summary": "Show the client config",
+        "operationId": "ClientConfig",
+        "responses": {
+          "200": {
+            "description": "Returned when the notification was handled successfully.",
+            "schema": {
+              "$ref": "#/definitions/google.protobuf.Empty"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "test": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "ConsulAMAService"
+        ]
+      }
+    },
     "/notifications/resource": {
       "post": {
         "summary": "ResourceNotification is an API endpoint called by Azure to deliver\nnotifications about changes on a managed app instance.",
