@@ -60,6 +60,65 @@
         ]
       }
     },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/config": {
+      "post": {
+        "summary": "GetConfig is an API endpoint called by the Azure CLI Extension\nto grab the Concul config and CA.",
+        "operationId": "GetConfig",
+        "responses": {
+          "200": {
+            "description": "Returned when the notification was handled successfully.",
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetConfigResponse"
+            }
+          },
+          "400": {
+            "description": "Returned when the request contained invalid data.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "401": {
+            "description": "Returned when the request did not contain a valid authentication token.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "500": {
+            "description": "Returned when there was an internal error.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "description": "subscription_id is the ID of the Azure subscription the new Consul\ncluster should be created in. This is the customer's subscription ID.\nPassed in the request path.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resourceGroup",
+            "description": "resource_group is the resource group in which the new Consul cluster\nshould be created. This is the AMA instance's managed resource group.\nPassed in the request path.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetConfigRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ConsulAMAService"
+        ]
+      }
+    },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/consulClusters": {
       "get": {
         "summary": "ListClusters is an API endpoint called by Azure to retrieve all Consul\nclusters in a managed app. This is one of the API endpoints required to\nimplement a custom resource provider.",
@@ -539,6 +598,30 @@
         }
       },
       "title": "See ConsulAMAService.CreateCluster"
+    },
+    "hashicorp.cloud.consulama.ama.GetConfigRequest": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string",
+          "description": "subscription_id is the ID of the Azure subscription the new Consul\ncluster should be created in. This is the customer's subscription ID.\nPassed in the request path."
+        },
+        "resourceGroup": {
+          "type": "string",
+          "description": "resource_group is the resource group in which the new Consul cluster\nshould be created. This is the AMA instance's managed resource group.\nPassed in the request path."
+        }
+      }
+    },
+    "hashicorp.cloud.consulama.ama.GetConfigResponse": {
+      "type": "object",
+      "properties": {
+        "caFile": {
+          "type": "string"
+        },
+        "clientConfig": {
+          "type": "string"
+        }
+      }
     },
     "hashicorp.cloud.consulama.ama.ListClustersResponse": {
       "type": "object",
