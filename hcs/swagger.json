@@ -381,6 +381,63 @@
           "ConsulAMAService"
         ]
       }
+    },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/createToken": {
+      "post": {
+        "summary": "CreateToken is used to create Tokens on a cluster (such as a master token)",
+        "operationId": "CreateToken",
+        "responses": {
+          "200": {
+            "description": "Returned when the notification was handled successfully.",
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.CreateTokenResponse"
+            }
+          },
+          "400": {
+            "description": "Returned when the request contained invalid data.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "401": {
+            "description": "Returned when the request did not contain a valid authentication token.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "500": {
+            "description": "Returned when there was an internal error.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resourceGroup",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.CreateTokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ConsulAMAService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -426,6 +483,18 @@
       },
       "description": "- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\n[google.rpc.Code][google.rpc.Code], but it may accept additional error codes\nif needed.  The error message should be a developer-facing English message\nthat helps developers *understand* and *resolve* the error. If a localized\nuser-facing error message is needed, put the localized message in the error\ndetails or localize it in the client. The optional error details may contain\narbitrary information about the error. There is a predefined set of error\ndetail types in the package `google.rpc` that can be used for common error\nconditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
       "title": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:"
+    },
+    "hashicorp.cloud.consulama.ama.ACLToken": {
+      "type": "object",
+      "properties": {
+        "accessorId": {
+          "type": "string"
+        },
+        "secretId": {
+          "type": "string"
+        }
+      },
+      "description": "ACLToken represents the Consul 1.4+ ACL token we just created."
     },
     "hashicorp.cloud.consulama.ama.ClusterMode": {
       "type": "string",
@@ -598,6 +667,27 @@
         }
       },
       "title": "See ConsulAMAService.CreateCluster"
+    },
+    "hashicorp.cloud.consulama.ama.CreateTokenRequest": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string"
+        },
+        "resourceGroup": {
+          "type": "string"
+        }
+      },
+      "description": "CreateTokenRequest creates a token for the sole cluster found using this subscription ID and managed resource group."
+    },
+    "hashicorp.cloud.consulama.ama.CreateTokenResponse": {
+      "type": "object",
+      "properties": {
+        "masterToken": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.ACLToken"
+        }
+      },
+      "description": "CreateTokenResponse contains the new Consul Master Token."
     },
     "hashicorp.cloud.consulama.ama.GetConfigRequest": {
       "type": "object",
