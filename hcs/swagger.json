@@ -438,6 +438,136 @@
           "ConsulAMAService"
         ]
       }
+    },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/operation": {
+      "post": {
+        "summary": "GetConfig is an API endpoint called by the Azure CLI Extension\nto query the status of an operation associated with the given cluster.",
+        "operationId": "GetOperation",
+        "responses": {
+          "200": {
+            "description": "Returned when the operation was retrieved successfully.",
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.operation.Operation"
+            }
+          },
+          "400": {
+            "description": "Returned when the request contained invalid data.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "401": {
+            "description": "Returned when the request did not contain a valid client certificate.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "404": {
+            "description": "Returned when the requested managed app, cluster, or operation does not exist.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "500": {
+            "description": "Returned when there was an internal error.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "description": "subscription_id is the ID of the Azure subscription the Consul cluster\nexists in. This is the customer's subscription ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resourceGroup",
+            "description": "resource_group is the resource group in which the Consul cluster is\nrunning. This is the AMA instance's managed resource group.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetOperationRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ConsulAMAService"
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/update": {
+      "post": {
+        "summary": "UpdateCluster is an API endpoint called by the hcs Azure CLI extension\nto modify the state of a running Consul cluster. Currently this is only\nused to upgrade the Consul version of the cluster.",
+        "operationId": "UpdateCluster",
+        "responses": {
+          "200": {
+            "description": "Returned when the cluster update was completed.",
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.UpdateClusterResponse"
+            }
+          },
+          "202": {
+            "description": "Returned when the cluster update was initiated.",
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.UpdateClusterResponse"
+            }
+          },
+          "400": {
+            "description": "Returned when the request contained invalid data.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "401": {
+            "description": "Returned when the request did not contain a valid client certificate.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "500": {
+            "description": "Returned when there was an internal error.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "description": "subscription_id is the ID of the Azure subscription the Consul cluster\nexists in. This is the customer's subscription ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resourceGroup",
+            "description": "resource_group is the resource group in which the Consul cluster is\nrunning. This is the AMA instance's managed resource group.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.UpdateClusterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ConsulAMAService"
+        ]
+      }
     }
   },
   "definitions": {
@@ -638,6 +768,16 @@
       "default": "UNSET",
       "description": "ClusterState describes the current state a cluster is in. There is no DELETED\nstate because after deletion clusters do not exist anymore and requests to\nretrieve them are responded to with not-found errors.\n\nThese values are specific to our comminication with Azure, and they're not backed\nby our persistence layer. When the consul-ama service has to produce a cluster\nstate to respond to a request from Azure, it reads the state from the consul-service\nand then translates the state value to one compatible with this enum."
     },
+    "hashicorp.cloud.consulama.ama.ClusterUpdate": {
+      "type": "object",
+      "properties": {
+        "consulVersion": {
+          "type": "string",
+          "description": "consul_version is the Consul version to upgrade the cluster to."
+        }
+      },
+      "description": "ClusterUpdate contains the details of the cluster which are requested\nto be updated."
+    },
     "hashicorp.cloud.consulama.ama.CreateClusterRequest": {
       "type": "object",
       "properties": {
@@ -713,6 +853,33 @@
         }
       }
     },
+    "hashicorp.cloud.consulama.ama.GetOperationRequest": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string",
+          "description": "subscription_id is the ID of the Azure subscription the Consul cluster\nexists in. This is the customer's subscription ID."
+        },
+        "resourceGroup": {
+          "type": "string",
+          "description": "resource_group is the resource group in which the Consul cluster is\nrunning. This is the AMA instance's managed resource group."
+        },
+        "operationId": {
+          "type": "string",
+          "title": "operation_id is the ID of the operation to fetch"
+        }
+      },
+      "title": "See ConsulAMAService.GetOperation"
+    },
+    "hashicorp.cloud.consulama.ama.GetOperationResponse": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "$ref": "#/definitions/hashicorp.cloud.operation.Operation"
+        }
+      },
+      "title": "See ConsulAMAService.GetOperation"
+    },
     "hashicorp.cloud.consulama.ama.ListClustersResponse": {
       "type": "object",
       "properties": {
@@ -725,20 +892,6 @@
         }
       },
       "title": "See ConsulAMAService.ListCluster"
-    },
-    "hashicorp.cloud.consulama.ama.ResourceNotificationError": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "string",
-          "title": "code is the error code of the failed operation, e.g.\n\"ResourceGroupDeletionBlocked\""
-        },
-        "message": {
-          "type": "string",
-          "description": "message is a human-readable description of the error."
-        }
-      },
-      "description": "ResourceNotificationError represents an error that happened in Azure when\ninteracting with a managed app instance. It is optionally included in a\nResourceNotificationRequest."
     },
     "hashicorp.cloud.consulama.ama.ResourceNotificationRequest": {
       "type": "object",
@@ -764,11 +917,188 @@
           "description": "application_definition_id is the complete ARM ID of the AMA instance's\napplication definition."
         },
         "error": {
-          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.ResourceNotificationError",
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.ResourceNotificationRequest.Error",
           "description": "error is added in case provosioning_state is \"Failed\" and describes the\nerror that lead to this condition."
+        },
+        "billingDetails": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.ResourceNotificationRequest.BillingDetails",
+          "description": "billing_details contains billing related information about a managed app\nthat is being provisioned."
+        },
+        "plan": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.ResourceNotificationRequest.Plan",
+          "description": "plan is information about the Azure Marketplace plan select before\nprovisioning the managed app."
         }
       },
       "title": "See ConsulAMAService.ResourceNotification"
+    },
+    "hashicorp.cloud.consulama.ama.ResourceNotificationRequest.BillingDetails": {
+      "type": "object",
+      "properties": {
+        "resourceUsageId": {
+          "type": "string",
+          "description": "resource_usage_id is the id used identify the managed app when\nemitting metered billing events to azure."
+        }
+      },
+      "description": "BillingDetails contains billing related information about a managed app."
+    },
+    "hashicorp.cloud.consulama.ama.ResourceNotificationRequest.Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "title": "code is the error code of the failed operation, e.g.\n\"ResourceGroupDeletionBlocked\""
+        },
+        "message": {
+          "type": "string",
+          "description": "message is a human-readable description of the error."
+        }
+      },
+      "description": "Error represents an error that happened in Azure when\ninteracting with a managed app instance. It is optionally included in a\nResourceNotificationRequest."
+    },
+    "hashicorp.cloud.consulama.ama.ResourceNotificationRequest.Plan": {
+      "type": "object",
+      "properties": {
+        "publisher": {
+          "type": "string",
+          "description": "publisher is the plan's publisher organization."
+        },
+        "product": {
+          "type": "string",
+          "description": "product is the name of the Marketplace offer."
+        },
+        "name": {
+          "type": "string",
+          "description": "name is the name of the Marketplace plan."
+        },
+        "version": {
+          "type": "string",
+          "description": "version is the version of the Marketplace plan."
+        }
+      },
+      "description": "Plan represents an Azure Marketplace plan."
+    },
+    "hashicorp.cloud.consulama.ama.UpdateClusterRequest": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string",
+          "description": "subscription_id is the ID of the Azure subscription the Consul cluster\nexists in. This is the customer's subscription ID."
+        },
+        "resourceGroup": {
+          "type": "string",
+          "description": "resource_group is the resource group in which the Consul cluster is\nrunning. This is the AMA instance's managed resource group."
+        },
+        "update": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.ClusterUpdate",
+          "description": "update contains the details of the Consul cluster to be updated."
+        }
+      },
+      "title": "See ConsulAMAService.UpdateCluster"
+    },
+    "hashicorp.cloud.consulama.ama.UpdateClusterResponse": {
+      "type": "object",
+      "properties": {
+        "operation": {
+          "$ref": "#/definitions/hashicorp.cloud.operation.Operation",
+          "title": "operation used to track the progress of the cluster update"
+        }
+      },
+      "title": "See ConsulAMAService.UpdateCluster"
+    },
+    "hashicorp.cloud.location.Link": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "type is the unique type of the resource. Each service publishes a\nunique set of types. The type value is recommended to be formatted\nin \"<org>.<type>\" such as \"hashicorp.hvn\". This is to prevent conflicts\nin the future, but any string value will work."
+        },
+        "uuid": {
+          "type": "string",
+          "description": "uuid is the unique UUID for this resource."
+        },
+        "location": {
+          "$ref": "#/definitions/hashicorp.cloud.location.Location",
+          "description": "location is the location where this resource is."
+        },
+        "description": {
+          "type": "string",
+          "description": "description is a human-friendly description for this link. This is\nused primarily for informational purposes such as error messages."
+        }
+      },
+      "description": "Link is used to uniquely reference any resource within HashiCorp Cloud.\nThis can be conceptually considered a \"foreign key\"."
+    },
+    "hashicorp.cloud.location.Location": {
+      "type": "object",
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "description": "organization_id is the id of the organization."
+        },
+        "project_id": {
+          "type": "string",
+          "description": "project_id is the projects id."
+        },
+        "region": {
+          "$ref": "#/definitions/hashicorp.cloud.location.Region",
+          "description": "region is the region that the resource is located in. It is\noptional if the object being referenced is a global object."
+        }
+      },
+      "description": "Location represents a target for an operation in HCP."
+    },
+    "hashicorp.cloud.location.Region": {
+      "type": "object",
+      "properties": {
+        "provider": {
+          "type": "string",
+          "title": "provider is the named cloud provider (\"aws\", \"gcp\", \"azure\")"
+        },
+        "region": {
+          "type": "string",
+          "title": "region is the cloud region (\"us-west1\", \"us-east1\")"
+        }
+      },
+      "description": "Region identifies a Cloud data-plane region."
+    },
+    "hashicorp.cloud.operation.Operation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "id is the unique ID for this operation used in other RPC calls.\nThis ID is only guaranteed to be unique within the region that\nthe operation is running in."
+        },
+        "state": {
+          "$ref": "#/definitions/hashicorp.cloud.operation.Operation.State",
+          "description": "state is the current state of the operation. This is a simple tri-state:\nPENDING means the operation is created but not yet started, RUNNING means\nthe operation is currently running (though it may be very long-running),\nand DONE means the operation is complete whether successfully or not."
+        },
+        "error": {
+          "$ref": "#/definitions/google.rpc.Status",
+          "description": "error is the error that occurred in the operation."
+        },
+        "response": {
+          "$ref": "#/definitions/google.protobuf.Any",
+          "description": "response is the result of the operation. See the documentation for the API\ncall creating the operation to understand what the value of this is."
+        },
+        "location": {
+          "$ref": "#/definitions/hashicorp.cloud.location.Location",
+          "description": "Location is location of the resource that this operation belongs to."
+        },
+        "link": {
+          "$ref": "#/definitions/hashicorp.cloud.location.Link",
+          "description": "Link is the resource link the operation is associated with."
+        }
+      },
+      "description": "Operation represents a single operation."
+    },
+    "hashicorp.cloud.operation.Operation.State": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "RUNNING",
+        "DONE",
+        "QUEUED"
+      ],
+      "default": "PENDING",
+      "description": "State is one of the states that an Operation can be in.\n\nThe states are purposely coarse grained to make it easy to understand\nthe operation state machine: pending => running => done. Or pending =>\nqueued => running => done. No other state transitions are possible. \nSuccess/failure can be determined based on the result oneof."
     }
   }
 }
