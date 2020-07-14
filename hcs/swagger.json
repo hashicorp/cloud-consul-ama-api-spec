@@ -447,7 +447,7 @@
           "200": {
             "description": "Returned when the operation was retrieved successfully.",
             "schema": {
-              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.Operation"
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetOperationResponse"
             }
           },
           "400": {
