@@ -3,7 +3,7 @@
   "info": {
     "title": "HashiCorp Consul Service (HCS)",
     "description": "Azure Managed App API for HCS",
-    "version": "2020-04-02"
+    "version": "2020-07-09"
   },
   "schemes": [
     "https"
@@ -725,6 +725,10 @@
         "consulClusterId": {
           "type": "string",
           "description": "consul_cluster_id is the HCS-internal ID of the Consul cluster."
+        },
+        "email": {
+          "type": "string",
+          "title": "email is the customer's email address"
         }
       },
       "description": "ClusterProperties contains properties the user selected when creating the\nmanaged app instance."
