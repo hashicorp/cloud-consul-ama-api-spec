@@ -60,6 +60,124 @@
         ]
       }
     },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/billingInfo": {
+      "post": {
+        "summary": "GetBillingInfo is an API endpoint called by the Azure CLI Extension\nto fetch current billing settings and usage data about a HCS managed app.",
+        "operationId": "GetBillingInfo",
+        "responses": {
+          "200": {
+            "description": "Returned when settings and usage data could be obtained successfully.",
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetBillingInfoResponse"
+            }
+          },
+          "401": {
+            "description": "Returned when the request did not contain a valid authentication token.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "404": {
+            "description": "Returned when referenced Managed App is not known.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "500": {
+            "description": "Returned when there was an internal error.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "description": "subscription_id is the ID of the Azure subscription the Managed App is\ndeployed to. This is the customer's subscription ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resourceGroup",
+            "description": "resource_group is the managed resource group of the Managed App.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetBillingInfoRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ConsulAMAService"
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/billingReport": {
+      "post": {
+        "summary": "GetBillingReport is an API endpoint called by the Azure CLI Extension\nto fetch the billing report about a HCS managed app for a given month.",
+        "operationId": "GetBillingReport",
+        "responses": {
+          "200": {
+            "description": "Returned when the billing report could be obtained successfully.",
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetBillingReportResponse"
+            }
+          },
+          "401": {
+            "description": "Returned when the request did not contain a valid authentication token.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "404": {
+            "description": "Returned when referenced Managed App is not known.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "500": {
+            "description": "Returned when there was an internal error.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "description": "subscription_id is the ID of the Azure subscription the Managed App is\ndeployed to. This is the customer's subscription ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resourceGroup",
+            "description": "resource_group is the managed resource group of the Managed App.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetBillingReportRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ConsulAMAService"
+        ]
+      }
+    },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/config": {
       "post": {
         "summary": "GetConfig is an API endpoint called by the Azure CLI Extension\nto grab the Concul config and CA.",
@@ -626,6 +744,123 @@
       },
       "description": "ACLToken represents the Consul 1.4+ ACL token we just created."
     },
+    "hashicorp.cloud.consulama.ama.BilledUsage": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "string",
+          "description": "start is the start time of the time frame."
+        },
+        "end": {
+          "type": "string",
+          "description": "end is the end time of the time frame."
+        },
+        "cost": {
+          "type": "number",
+          "format": "double",
+          "description": "cost is the total cost billed for the time frame."
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hashicorp.cloud.consulama.ama.BilledUsage.PlanUsage"
+          },
+          "description": "details contains usage by plan. Because there can be multiple settings\napplied to one time frame, this needs to be a list."
+        }
+      },
+      "description": "BilledUsage describes the usage that was recorded and billed for a specific\ntime frame."
+    },
+    "hashicorp.cloud.consulama.ama.BilledUsage.PlanUsage": {
+      "type": "object",
+      "properties": {
+        "plan": {
+          "type": "string",
+          "description": "plan is the name of the billing plan."
+        },
+        "hours": {
+          "type": "number",
+          "format": "double",
+          "description": "hours describes how many hours were consumed on this plan."
+        },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/hashicorp.cloud.consulama.ama.BilledUsage.PlanUsage.UsageDimension"
+          },
+          "description": "dimensions details what billing dimensions caused the cost."
+        }
+      },
+      "description": "PlanUsage describes the usage billed based on a single plan."
+    },
+    "hashicorp.cloud.consulama.ama.BilledUsage.PlanUsage.UsageDimension": {
+      "type": "object",
+      "properties": {
+        "tiers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": "tiers has information about how many units of the dimension were\nbilled based on each tier."
+        }
+      },
+      "description": "UsageDimension describes the usage of a single billing dimension."
+    },
+    "hashicorp.cloud.consulama.ama.BillingSettings": {
+      "type": "object",
+      "properties": {
+        "plan": {
+          "type": "string",
+          "title": "plan is the name of the billing plan. This is a simplified version of the\ninternal plan identifier:\n   e.g. \"annual\" instead of \"production-annual-through-hc\""
+        },
+        "activeSince": {
+          "type": "string",
+          "description": "active_since is the time since when the billing settings are active."
+        },
+        "prices": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.BillingSettings.Prices",
+          "description": "prices represents the prices of the current plan."
+        }
+      },
+      "description": "BillingSettings is the representation of the billing settings of a managed\napp that is exposed to users."
+    },
+    "hashicorp.cloud.consulama.ama.BillingSettings.Prices": {
+      "type": "object",
+      "properties": {
+        "hourly": {
+          "type": "number",
+          "format": "double",
+          "description": "hourly is the flat hourly fee billed for the usage of this plan\nindependent of other billing dimensions."
+        },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/hashicorp.cloud.consulama.ama.BillingSettings.Prices.PriceDimension"
+          },
+          "description": "dimensions contains all dimensions and their prices that are applied\nto apps on this billing plan."
+        }
+      },
+      "description": "Prices represents prices of a billing plan."
+    },
+    "hashicorp.cloud.consulama.ama.BillingSettings.Prices.PriceDimension": {
+      "type": "object",
+      "properties": {
+        "minimum": {
+          "type": "integer",
+          "format": "int32",
+          "description": "minimum is the minimum number of billed units of this dimension."
+        },
+        "tiers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          },
+          "title": "tiers describes the tiered prices of this billing dimension, for\nexample:\n     1-50   -> 0.022\n     51-250 -> 0.018\n     250+   -> 0.014"
+        }
+      },
+      "description": "PriceDimension represents the prices of one billing dimension."
+    },
     "hashicorp.cloud.consulama.ama.ClusterMode": {
       "type": "string",
       "enum": [
@@ -832,6 +1067,101 @@
         }
       },
       "description": "CreateTokenResponse contains the new Consul Master Token."
+    },
+    "hashicorp.cloud.consulama.ama.GetBillingInfoRequest": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string",
+          "description": "subscription_id is the ID of the Azure subscription the Managed App is\ndeployed to. This is the customer's subscription ID."
+        },
+        "resourceGroup": {
+          "type": "string",
+          "description": "resource_group is the managed resource group of the Managed App."
+        }
+      },
+      "description": "See ConsulAMAService.GetBillingInfo."
+    },
+    "hashicorp.cloud.consulama.ama.GetBillingInfoResponse": {
+      "type": "object",
+      "properties": {
+        "currentSettings": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.BillingSettings",
+          "description": "current_settings represents the currently active billing settings of the\napp."
+        },
+        "usage": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetBillingInfoResponse.CurrentUsage",
+          "description": "usage represents the billed usage of the current time period."
+        }
+      },
+      "description": "See ConsulAMAService.GetBillingInfo."
+    },
+    "hashicorp.cloud.consulama.ama.GetBillingInfoResponse.CurrentUsage": {
+      "type": "object",
+      "properties": {
+        "timePeriod": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/hashicorp.cloud.consulama.ama.BilledUsage"
+          },
+          "description": "time_period has usage data for multiple time frames that are\ndescribed by the key of this map and the included start/end\ntimestamps.\n\nFor example:\n  \"today\"      => { ... }\n  \"this_month\" => { ... }"
+        }
+      },
+      "description": "CurrentUsage describes what has been billed for a managed app in the current\ntime period(s)."
+    },
+    "hashicorp.cloud.consulama.ama.GetBillingReportRequest": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string",
+          "description": "subscription_id is the ID of the Azure subscription the Managed App is\ndeployed to. This is the customer's subscription ID."
+        },
+        "resourceGroup": {
+          "type": "string",
+          "description": "resource_group is the managed resource group of the Managed App."
+        },
+        "month": {
+          "type": "string",
+          "title": "month indicates from which month to fetch usage information.\nFormat: 2020/07"
+        }
+      },
+      "description": "See ConsulAMAService.GetBillingReport."
+    },
+    "hashicorp.cloud.consulama.ama.GetBillingReportResponse": {
+      "type": "object",
+      "properties": {
+        "usage": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetBillingReportResponse.BilledItem"
+          },
+          "description": "usage contains the usage that was recorded for the requested month.\nThere is one entry in this list per applied plan per hour."
+        }
+      },
+      "description": "See ConsulAMAService.GetBillingReport."
+    },
+    "hashicorp.cloud.consulama.ama.GetBillingReportResponse.BilledItem": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "string",
+          "description": "start is the start time of the time frame."
+        },
+        "end": {
+          "type": "string",
+          "description": "end is the end time of the time frame."
+        },
+        "plan": {
+          "type": "string",
+          "description": "plan is the name of the billing plan applied to the time frame."
+        },
+        "cost": {
+          "type": "number",
+          "format": "double",
+          "description": "cost is the total cost billed for the time frame."
+        }
+      },
+      "description": "BilledItem represents one time frame for which a specific billing plan\nwas applied to the managed app."
     },
     "hashicorp.cloud.consulama.ama.GetConfigRequest": {
       "type": "object",
