@@ -1100,14 +1100,25 @@
       "type": "object",
       "properties": {
         "timePeriod": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/definitions/hashicorp.cloud.consulama.ama.BilledUsage"
-          },
-          "description": "time_period has usage data for multiple time frames that are\ndescribed by the key of this map and the included start/end\ntimestamps.\n\nFor example:\n  \"today\"      => { ... }\n  \"this_month\" => { ... }"
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetBillingInfoResponse.CurrentUsagePeriods",
+          "description": "time_period has usage data for multiple time frames."
         }
       },
       "description": "CurrentUsage describes what has been billed for a managed app in the current\ntime period(s)."
+    },
+    "hashicorp.cloud.consulama.ama.GetBillingInfoResponse.CurrentUsagePeriods": {
+      "type": "object",
+      "properties": {
+        "today": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.BilledUsage",
+          "description": "today describes usage billed to the current day."
+        },
+        "thisMonth": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.BilledUsage",
+          "description": "this_moneth describes usage billed to the current month."
+        }
+      },
+      "description": "CurrentUsagePeriods contains usage data for several time periods."
     },
     "hashicorp.cloud.consulama.ama.GetBillingReportRequest": {
       "type": "object",
