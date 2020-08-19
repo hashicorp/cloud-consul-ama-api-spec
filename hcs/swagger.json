@@ -1170,6 +1170,14 @@
           "type": "number",
           "format": "double",
           "description": "cost is the total cost billed for the time frame."
+        },
+        "dimensions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "description": "dimensions details what billing dimensions caused the cost."
         }
       },
       "description": "BilledItem represents one time frame for which a specific billing plan\nwas applied to the managed app."
