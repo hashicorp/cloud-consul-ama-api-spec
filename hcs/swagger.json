@@ -781,48 +781,9 @@
           "type": "number",
           "format": "double",
           "description": "hours describes how many hours were consumed on this plan."
-        },
-        "dimensions": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/hashicorp.cloud.consulama.ama.BilledUsage.PlanUsage.UsageDimension"
-          },
-          "description": "dimensions details what billing dimensions caused the cost."
         }
       },
       "description": "PlanUsage describes the usage billed based on a single plan."
-    },
-    "hashicorp.cloud.consulama.ama.BilledUsage.PlanUsage.UsageDimension": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "name is the usage dimension's name."
-        },
-        "tiers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/hashicorp.cloud.consulama.ama.BilledUsage.PlanUsage.UsageDimension.Tier"
-          },
-          "description": "tiers is the usage per tier in this dimension."
-        }
-      },
-      "description": "UsageDimension describes the usage of a single billing dimension."
-    },
-    "hashicorp.cloud.consulama.ama.BilledUsage.PlanUsage.UsageDimension.Tier": {
-      "type": "object",
-      "properties": {
-        "label": {
-          "type": "string",
-          "description": "label is a string description of this tier."
-        },
-        "units": {
-          "type": "integer",
-          "format": "int32",
-          "description": "units is the number of consumed units in this tier."
-        }
-      },
-      "description": "Tier represents the usage that is billed according to one tier."
     },
     "hashicorp.cloud.consulama.ama.BillingSettings": {
       "type": "object",
@@ -1224,13 +1185,30 @@
           "type": "string",
           "description": "name is the name of the billing dimension."
         },
-        "units": {
-          "type": "integer",
-          "format": "int32",
-          "description": "units is the number of units billed to this dimension."
+        "tiers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetBillingReportResponse.BilledItem.Dimension.Tier"
+          },
+          "description": "tiers is the usage per tier in this dimension."
         }
       },
       "description": "Dimension represents a billing dimension."
+    },
+    "hashicorp.cloud.consulama.ama.GetBillingReportResponse.BilledItem.Dimension.Tier": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "label is a string description of this tier."
+        },
+        "units": {
+          "type": "integer",
+          "format": "int32",
+          "description": "units is the number of consumed units in this tier."
+        }
+      },
+      "description": "Tier represents the usage that is billed according to one tier."
     },
     "hashicorp.cloud.consulama.ama.GetConfigRequest": {
       "type": "object",
