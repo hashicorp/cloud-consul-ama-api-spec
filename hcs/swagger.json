@@ -3,7 +3,7 @@
   "info": {
     "title": "HashiCorp Consul Service (HCS)",
     "description": "Azure Managed App API for HCS",
-    "version": "2020-09-08"
+    "version": "2020-09-09"
   },
   "schemes": [
     "https"
@@ -492,6 +492,63 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/hashicorp.cloud.consulama.ama.CreateClusterRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ConsulAMAService"
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/createFederationToken": {
+      "post": {
+        "summary": "CreateFederationToken is used to create a federation Token",
+        "operationId": "CreateFederationToken",
+        "responses": {
+          "200": {
+            "description": "Returned when the notification was handled successfully.",
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.CreateFederationTokenResponse"
+            }
+          },
+          "400": {
+            "description": "Returned when the request contained invalid data.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "401": {
+            "description": "Returned when the request did not contain a valid authentication token.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "500": {
+            "description": "Returned when there was an internal error.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resourceGroup",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.CreateFederationTokenRequest"
             }
           }
         ],
@@ -1047,6 +1104,27 @@
         }
       },
       "title": "See ConsulAMAService.CreateCluster"
+    },
+    "hashicorp.cloud.consulama.ama.CreateFederationTokenRequest": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string"
+        },
+        "resourceGroup": {
+          "type": "string"
+        }
+      },
+      "description": "CreateFederationTokenRequest creates a federation token for the sole cluster found using this subscription ID and managed resource group."
+    },
+    "hashicorp.cloud.consulama.ama.CreateFederationTokenResponse": {
+      "type": "object",
+      "properties": {
+        "federationToken": {
+          "type": "string"
+        }
+      },
+      "description": "CreateFederationTokenResponse contains the new Consul Federation Token."
     },
     "hashicorp.cloud.consulama.ama.CreateTokenRequest": {
       "type": "object",
