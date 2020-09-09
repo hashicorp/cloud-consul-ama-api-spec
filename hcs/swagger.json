@@ -3,7 +3,7 @@
   "info": {
     "title": "HashiCorp Consul Service (HCS)",
     "description": "Azure Managed App API for HCS",
-    "version": "2020-07-09"
+    "version": "2020-09-08"
   },
   "schemes": [
     "https"
@@ -961,6 +961,10 @@
         "email": {
           "type": "string",
           "title": "email is the customer's email address"
+        },
+        "federation_token": {
+          "type": "string",
+          "description": "federation_token is the token of the primary consul cluster in a federation.\nIt is only provided when federation is being requested."
         }
       },
       "description": "ClusterProperties contains properties the user selected when creating the\nmanaged app instance."
