@@ -962,7 +962,7 @@
           "type": "string",
           "title": "email is the customer's email address"
         },
-        "federation_token": {
+        "federationToken": {
           "type": "string",
           "description": "federation_token is the token of the primary consul cluster in a federation.\nIt is only provided when federation is being requested."
         }
