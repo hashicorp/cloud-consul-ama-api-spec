@@ -1022,6 +1022,10 @@
         "federationToken": {
           "type": "string",
           "description": "federation_token is the token of the primary consul cluster in a federation.\nIt is only provided when federation is being requested."
+        },
+        "vnetName": {
+          "type": "string",
+          "description": "vnet_name is the name of the Azure Virtual Network the consul cluster\nis deployed in."
         }
       },
       "description": "ClusterProperties contains properties the user selected when creating the\nmanaged app instance."
