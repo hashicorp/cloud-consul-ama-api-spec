@@ -1819,12 +1819,12 @@
     "hashicorp.cloud.consulama.ama.ListSnapshotsResponse": {
       "type": "object",
       "properties": {
-        "value": {
+        "snapshots": {
           "type": "array",
           "items": {
             "$ref": "#/definitions/hashicorp.cloud.consulama.ama.SnapshotProperties"
           },
-          "description": "value is the list of snapshots in the format of SnapshotResponses."
+          "description": "snapshots is the list of snapshots in the format of SnapshotResponses."
         }
       },
       "title": "See ConsulAMAService.ListSnapshots"
