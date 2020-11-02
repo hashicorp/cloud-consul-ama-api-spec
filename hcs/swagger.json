@@ -3,7 +3,7 @@
   "info": {
     "title": "HashiCorp Consul Service (HCS)",
     "description": "Azure Managed App API for HCS",
-    "version": "2020-10-06"
+    "version": "2020-10-22"
   },
   "schemes": [
     "https"
@@ -724,6 +724,63 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/hashicorp.cloud.consulama.ama.DeleteSnapshotRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ConsulAMAService"
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/getFederation": {
+      "post": {
+        "summary": "GetFederation is used to get a federation",
+        "operationId": "GetFederation",
+        "responses": {
+          "200": {
+            "description": "Returned when the notification was handled successfully.",
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetFederationResponse"
+            }
+          },
+          "400": {
+            "description": "Returned when the request contained invalid data.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "401": {
+            "description": "Returned when the request did not contain a valid authentication .",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "500": {
+            "description": "Returned when there was an internal error.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resourceGroup",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetFederationRequest"
             }
           }
         ],
@@ -1565,6 +1622,24 @@
       },
       "title": "See ConsulAMAService.DeleteSnapshot"
     },
+    "hashicorp.cloud.consulama.ama.FederatedClusterResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "subscriptionId": {
+          "type": "string"
+        },
+        "resourceGroup": {
+          "type": "string"
+        }
+      },
+      "description": "FederatedClusterResponse contains minimal cluster information for identifying\na cluster in a federation."
+    },
     "hashicorp.cloud.consulama.ama.GetBillingInfoRequest": {
       "type": "object",
       "properties": {
@@ -1733,6 +1808,49 @@
           "type": "string"
         }
       }
+    },
+    "hashicorp.cloud.consulama.ama.GetFederationRequest": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string"
+        },
+        "resourceGroup": {
+          "type": "string"
+        }
+      },
+      "description": "GetFederationRequest gets a complete federation view for the sole\ncluster found using the subscription ID and managed resource group. This can\ntarget a primary or secondary clusters."
+    },
+    "hashicorp.cloud.consulama.ama.GetFederationResponse": {
+      "type": "object",
+      "properties": {
+        "primaryDatacenter": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.FederatedClusterResponse",
+          "description": "primary_datacenter is the primary datacenter of a federation."
+        },
+        "secondaryDatacenters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hashicorp.cloud.consulama.ama.FederatedClusterResponse"
+          },
+          "description": "secondary_datacenters are a list of all secondary datacenters of a federation."
+        },
+        "state": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.GetFederationResponse.FederationState",
+          "description": "state is the state of the federation. See FederationState for possible values."
+        }
+      },
+      "description": "GetFederationResponse contains the primary cluster and all secondary\nclusters."
+    },
+    "hashicorp.cloud.consulama.ama.GetFederationResponse.FederationState": {
+      "type": "string",
+      "enum": [
+        "UNKNOWN",
+        "RUNNING",
+        "PRIMARY_DATACENTER_MISSING"
+      ],
+      "default": "UNKNOWN",
+      "description": "FederationState describes the current state of a federation.\n\n - UNKNOWN: UNKNOWN is the default value; it indicates that the value is not set.\n - RUNNING: RUNNING means the federation is in a healthy state.\n - PRIMARY_DATACENTER_MISSING: PRIMARY_DATACENTER_MISSING means the federation's primary cluster has been deleted.\nAny remaining secondary clusters can still communicate, but new clusters cannot be added to the federation."
     },
     "hashicorp.cloud.consulama.ama.GetOperationRequest": {
       "type": "object",
