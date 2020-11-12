@@ -3,7 +3,7 @@
   "info": {
     "title": "HashiCorp Consul Service (HCS)",
     "description": "Azure Managed App API for HCS",
-    "version": "2020-11-02"
+    "version": "2020-11-06"
   },
   "schemes": [
     "https"
@@ -848,6 +848,65 @@
         ]
       }
     },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/listConsulUpgradeVersions": {
+      "post": {
+        "summary": "ListConsulUpgradeVersions is an API endpoint called by the hcs Azure CLI extension\nto retrieve the versions supported by the cluser in an upgrade scenario.",
+        "operationId": "ListConsulUpgradeVersions",
+        "responses": {
+          "200": {
+            "description": "Returned when made against a valid cluster.",
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.ListConsulUpgradeVersionsResponse"
+            }
+          },
+          "400": {
+            "description": "Returned when the request contained invalid data.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "401": {
+            "description": "Returned when the request did not contain a valid client certificate.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "500": {
+            "description": "Returned when there was an internal error.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "description": "subscription_id is the ID of the Azure subscription the Consul cluster\nexists in. This is the customer's subscription ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resourceGroup",
+            "description": "resource_group is the resource group in which the Consul cluster is\nrunning. This is the AMA instance's managed resource group.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.ListConsulUpgradeVersionsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ConsulAMAService"
+        ]
+      }
+    },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/listSnapshots": {
       "post": {
         "summary": "ListSnapshots is used to list snapshots for a Consul cluster",
@@ -1333,7 +1392,7 @@
         "TRUE"
       ],
       "default": "FALSE",
-      "title": "Boolean is an enum for handling true/false values as Azure swagger validation doesn't\nlike bools: \nhttps://github.com/Azure/azure-rest-api-specs/blob/master/documentation/openapi-authoring-automated-guidelines.md#r3018"
+      "title": "Boolean is an enum for handling true/false values as Azure swagger validation doesn't\nlike bools:\nhttps://github.com/Azure/azure-rest-api-specs/blob/master/documentation/openapi-authoring-automated-guidelines.md#r3018"
     },
     "hashicorp.cloud.consulama.ama.ClusterMode": {
       "type": "string",
@@ -1929,6 +1988,31 @@
       },
       "title": "See ConsulAMAService.ListCluster"
     },
+    "hashicorp.cloud.consulama.ama.ListConsulUpgradeVersionsRequest": {
+      "type": "object",
+      "properties": {
+        "subscriptionId": {
+          "type": "string",
+          "description": "subscription_id is the ID of the Azure subscription the Consul cluster\nexists in. This is the customer's subscription ID."
+        },
+        "resourceGroup": {
+          "type": "string",
+          "description": "resource_group is the resource group in which the Consul cluster is\nrunning. This is the AMA instance's managed resource group."
+        }
+      },
+      "title": "See ConsulAMAService.ListUpdateVersion"
+    },
+    "hashicorp.cloud.consulama.ama.ListConsulUpgradeVersionsResponse": {
+      "type": "object",
+      "properties": {
+        "versions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/hashicorp.cloud.consulama.ama.Version"
+          }
+        }
+      }
+    },
     "hashicorp.cloud.consulama.ama.ListSnapshotsRequest": {
       "type": "object",
       "properties": {
@@ -2209,6 +2293,30 @@
         }
       },
       "title": "See ConsulAMAService.UpdateCluster"
+    },
+    "hashicorp.cloud.consulama.ama.Version": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "version is the string representation of the Consul version."
+        },
+        "status": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.Version.Status",
+          "description": "status defines the version availability."
+        }
+      },
+      "description": "Version is a consul cluster version used in upgrade scenarios."
+    },
+    "hashicorp.cloud.consulama.ama.Version.Status": {
+      "type": "string",
+      "enum": [
+        "AVAILABLE",
+        "RECOMMENDED",
+        "PREVIEW"
+      ],
+      "default": "AVAILABLE",
+      "description": "Status defines the version availability metadata.\n\n - AVAILABLE: AVAILABLE represents a version that is generally available\nbut no longer the preferred/recommended version.\n - RECOMMENDED: RECOMMENDED represents a version that is generally available\nand recommended by HashiCorp.\n - PREVIEW: PREVIEW represents a version that is not generally available."
     }
   }
 }
