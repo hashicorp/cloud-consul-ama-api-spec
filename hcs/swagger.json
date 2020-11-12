@@ -907,6 +907,65 @@
         ]
       }
     },
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/listUpgradeVersions": {
+      "post": {
+        "summary": "ListUpgradeVersions is an API endpoint called by the hcs Azure CLI extension\nto retrieve the versions supported by the cluser in an upgrade scenario.",
+        "operationId": "ListUpgradeVersions",
+        "responses": {
+          "200": {
+            "description": "Returned when made against a valid cluster.",
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.ListUpgradeVersionsResponse"
+            }
+          },
+          "400": {
+            "description": "Returned when the request contained invalid data.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "401": {
+            "description": "Returned when the request did not contain a valid client certificate.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          },
+          "500": {
+            "description": "Returned when there was an internal error.",
+            "schema": {
+              "$ref": "#/definitions/google.rpc.Status"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "description": "subscription_id is the ID of the Azure subscription the Consul cluster\nexists in. This is the customer's subscription ID.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "resourceGroup",
+            "description": "resource_group is the resource group in which the Consul cluster is\nrunning. This is the AMA instance's managed resource group.",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.ListUpgradeVersionsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "ConsulAMAService"
+        ]
+      }
+    },
     "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/operation": {
       "post": {
         "summary": "GetConfig is an API endpoint called by the Azure CLI Extension\nto query the status of an operation associated with the given cluster.",
@@ -1147,65 +1206,6 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/hashicorp.cloud.consulama.ama.UpdateClusterRequest"
-            }
-          }
-        ],
-        "tags": [
-          "ConsulAMAService"
-        ]
-      }
-    },
-    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.CustomProviders/resourceProviders/public/updateVersions": {
-      "post": {
-        "summary": "ListUpgradeVersions is an API endpoint called by the hcs Azure CLI extension\nto retrieve the versions supported by the cluser in an upgrade scenario.",
-        "operationId": "ListUpgradeVersions",
-        "responses": {
-          "200": {
-            "description": "Returned when made against a valid cluster.",
-            "schema": {
-              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.ListUpgradeVersionsResponse"
-            }
-          },
-          "400": {
-            "description": "Returned when the request contained invalid data.",
-            "schema": {
-              "$ref": "#/definitions/google.rpc.Status"
-            }
-          },
-          "401": {
-            "description": "Returned when the request did not contain a valid client certificate.",
-            "schema": {
-              "$ref": "#/definitions/google.rpc.Status"
-            }
-          },
-          "500": {
-            "description": "Returned when there was an internal error.",
-            "schema": {
-              "$ref": "#/definitions/google.rpc.Status"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "subscriptionId",
-            "description": "subscription_id is the ID of the Azure subscription the Consul cluster\nexists in. This is the customer's subscription ID.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "resourceGroup",
-            "description": "resource_group is the resource group in which the Consul cluster is\nrunning. This is the AMA instance's managed resource group.",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/hashicorp.cloud.consulama.ama.ListUpgradeVersionsRequest"
             }
           }
         ],
