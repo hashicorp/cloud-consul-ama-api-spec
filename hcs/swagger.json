@@ -3,7 +3,7 @@
   "info": {
     "title": "HashiCorp Consul Service (HCS)",
     "description": "Azure Managed App API for HCS",
-    "version": "2021-03-17"
+    "version": "2020-12-21"
   },
   "schemes": [
     "https"
