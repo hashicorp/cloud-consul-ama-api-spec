@@ -1653,7 +1653,7 @@
         },
         "auditLoggingEnabled": {
           "$ref": "#/definitions/hashicorp.cloud.consulama.ama.Boolean",
-          "title": "audit_logging_enabled indicates that audit logging should be enabled for this cluster"
+          "title": "audit_logging_enabled controls whether Consul should emit audit logs"
         }
       },
       "description": "ClusterProperties contains properties the user selected when creating the\nmanaged app instance."
