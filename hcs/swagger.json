@@ -1654,6 +1654,13 @@
         "auditLoggingEnabled": {
           "$ref": "#/definitions/hashicorp.cloud.consulama.ama.Boolean",
           "title": "audit_logging_enabled controls whether Consul should emit audit logs"
+        },
+        "vmssIdentity": {
+          "type": "string"
+        },
+        "auditLogStorageAccountURL": {
+          "type": "string",
+          "description": "audit_log_storage_account_url is an Azure blob container URL for where\nthe log exfiltration process will copy audit logs."
         }
       },
       "description": "ClusterProperties contains properties the user selected when creating the\nmanaged app instance."
