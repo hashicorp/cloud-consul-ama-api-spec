@@ -1412,6 +1412,24 @@
       },
       "description": "ACLToken represents the Consul 1.4+ ACL token we just created."
     },
+    "hashicorp.cloud.consulama.ama.AuditLoggingUpdate": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.Boolean",
+          "description": "enabled should be set to TRUE to enable audit logging."
+        },
+        "managedIdentity": {
+          "type": "string",
+          "description": "managed_identity is the Azure resource ID of the managed identity\nthat has permission to write to the storage container provided\nin storage_container_url."
+        },
+        "storageContainerUrl": {
+          "type": "string",
+          "description": "storage_container_url is the URL of an Azure blob container to write \nthe Consul audit logs to. The vmss_identity must have write permissions \nfor this storage container."
+        }
+      },
+      "description": "AuditLoggingUpdate contains the details required to configure Consul audit logging\nfor the cluster."
+    },
     "hashicorp.cloud.consulama.ama.BilledUsage": {
       "type": "object",
       "properties": {
@@ -1655,12 +1673,13 @@
           "$ref": "#/definitions/hashicorp.cloud.consulama.ama.Boolean",
           "title": "audit_logging_enabled controls whether Consul should emit audit logs"
         },
-        "vmssIdentity": {
-          "type": "string"
-        },
-        "auditLogStorageAccountURL": {
+        "managedIdentity": {
           "type": "string",
-          "description": "audit_log_storage_account_url is an Azure blob container URL for where\nthe log exfiltration process will copy audit logs."
+          "title": "managedidentity is the Azure managed identity that should be assigned to\nvmss resources created within the app"
+        },
+        "auditLogStorageContainerURL": {
+          "type": "string",
+          "description": "audit_log_storage_container_url is an Azure blob container URL for where\nthe log exfiltration process will copy audit logs."
         }
       },
       "description": "ClusterProperties contains properties the user selected when creating the\nmanaged app instance."
@@ -1710,6 +1729,10 @@
         "consulVersion": {
           "type": "string",
           "description": "consul_version is the Consul version to upgrade the cluster to."
+        },
+        "auditLogging": {
+          "$ref": "#/definitions/hashicorp.cloud.consulama.ama.AuditLoggingUpdate",
+          "description": "audit_logging is the configuration for enabling Consul audit logs."
         }
       },
       "description": "ClusterUpdate contains the details of the cluster which are requested\nto be updated."
