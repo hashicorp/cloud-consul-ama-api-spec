@@ -3,7 +3,7 @@
   "info": {
     "title": "HashiCorp Consul Service (HCS)",
     "description": "Azure Managed App API for HCS",
-    "version": "2020-12-21"
+    "version": "2020-04-23"
   },
   "schemes": [
     "https"
@@ -1419,13 +1419,9 @@
           "$ref": "#/definitions/hashicorp.cloud.consulama.ama.Boolean",
           "description": "enabled should be set to TRUE to enable audit logging."
         },
-        "managedIdentity": {
-          "type": "string",
-          "description": "managed_identity is the Azure resource ID of the managed identity\nthat has permission to write to the storage container provided\nin storage_container_url."
-        },
         "storageContainerUrl": {
           "type": "string",
-          "description": "storage_container_url is the URL of an Azure blob container to write \nthe Consul audit logs to. The vmss_identity must have write permissions \nfor this storage container."
+          "description": "storage_container_url is the URL of an Azure blob container to write\nthe Consul audit logs to. The vmss_identity must have write permissions \nfor this storage container."
         }
       },
       "description": "AuditLoggingUpdate contains the details required to configure Consul audit logging\nfor the cluster."
